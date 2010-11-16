@@ -1,0 +1,33 @@
+= Redis Dump
+
+<i>Think mysqldump... only for redis</i>
+
+<b>This is beta software. It has been successfully run on an active production deployment but there is still a lot of features and bugs to address. Your mileage may vary.</b>
+
+== Goal
+
+Say for example you're running a Redis server on AWS EC2 and then your EBS volume freezes, causing your BGSAVE and AOF file to never complete but your Redis instance continue to serve requests (and because the BGSAVE can't complete you can't hook up a new slave to the instance either). You need to rescue your data and load it to a new instance.
+
+The goal of this tool is to provide a simple way to dump and load the contents of a currently running Redis instance. It is meant to be easy to install (only needs ruby and the Redis gem, SystemTimer recommended), provide a dump that is easy to visually check (hence yaml output, though more concise outputs are planned), and be simple to extend.
+
+== Usage
+
+1. Adjust the Redis.new command to include any parameters needed (e.g. password, host, port, etc) for your source redis instance
+2. Call the 'dump' method, this will dump the databases content to yaml
+3. Adjust the Redis.new call for your target redis instance.
+4. Call the 'load' method, this will load the yaml dump to the target redis instance.
+
+== To Do
+
+* Support for a TTL on keys
+* Support for more formats than just yml (such as json, binary, and redis commands)
+* Support for the 'none' type of keys 
+* Adjust usage to more closely match mysqldump and be more scripting friendly
+* Improve speed (current implementation isn't going to win any races)
+* Progress indicator
+* Make a gem (why not?)
+
+== Thanks
+
+* Antirez for making redis so awesome
+* Ezmobius for making an awesome redis gem 
